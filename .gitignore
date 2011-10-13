@@ -2,4 +2,5 @@ backup/
 result/
 *.pyc
 *.json
+*.swp
 
