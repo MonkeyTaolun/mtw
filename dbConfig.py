@@ -6,7 +6,7 @@ import json
 import logging
 
 class MongoConf(object):
-  def __init__(self, conf):
+  def __init__(self, keyword, conf):
     try:
       fileHandle = open(conf)
     except IOError:
@@ -15,7 +15,7 @@ class MongoConf(object):
     self.conf = json.load(fileHandle)
     self.connection = Connection(self.conf['host'], self.conf['port'])
     self.db = self.connection[self.conf['dbname']]
-    self.posts = self.db.posts
+    self.posts = self.db[keyword]
   
   def insert(self, tweet):
     if None == self.posts.find_one({"id": tweet['id']}):

@@ -14,6 +14,7 @@ class TweetCrawler(object):
   def crawl(self):
     searchResult = self.searchCrawler.crawl()
     idset = set()
+    hashtagset = set()
     for tweet in searchResult:
       twi = json.loads(tweet)
       idset.add(twi['uid'])
