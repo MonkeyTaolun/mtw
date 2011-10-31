@@ -9,21 +9,23 @@ class TweetCrawler(object):
   def __init__(self, term, twiconf, dbconf):
     self.searchCrawler  = SearchCrawler(term)
     self.twitterCrawler = TwitterCrawler(twiconf)
-    self.db             = MongoConf(dbconf)
+    self.db             = MongoConf(term, dbconf)
 
   def crawl(self):
     searchResult = self.searchCrawler.crawl()
     idset = set()
-    hashtagset = set()
+    tagset = set()
     for tweet in searchResult:
       twi = json.loads(tweet)
       idset.add(twi['uid'])
       if(None != twi['tid']):
         idset.add(twi['tid'])
+      if(None != twi['tag']):
+        tagset.add(twi['tag'])
       self.db.insert(twi)
     
-    self.deepCrawl(idset, 0);
-
+    self.deepCrawl(idset, 0)
+    self.tagCrawl(tagset)
   def deepCrawl(self, idset, depth):
     if(depth > 3): 
       return
@@ -42,4 +44,10 @@ class TweetCrawler(object):
         self.db.insert(twi)
     
     self.deepCrawl(myset, depth + 1)
-  
+  def tagCrawl(self, tagset):
+    for tag in tagset:
+      tagcrawler  = SearchCrawler(tag)
+      tagtweets = tagcrawler.crawl()
+      for tweet in tagtweets:
+        twi = json.loads(tweet)
+        self.db.insert(twi)

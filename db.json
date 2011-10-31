@@ -1,4 +1,4 @@
-{"host":"host ip",
-"port": port number,
-"dbname":"dbname"
+{"host":"127.0.0.1",
+"port": 27017,
+"dbname":"mappingtheworld"
 }

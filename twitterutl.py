@@ -1,23 +1,21 @@
 #!/usr/bin/env python
 
 import json
-def getHref(twi):
-  text        = twi['text']
+def getHref(text):
   herf_s      = text.find('http://')
-  if(-1 == herf_s) return None
+  if(-1 == herf_s): return None
   herf        = text[herf_s:]
   herf_e      = herf.find(' ')
-  if(-1 == herf_e) return herf
+  if(-1 == herf_e): return herf
   return herf[:herf_e]
   
 
-def getHashTag(twi):
-  text        = twi['text']
+def getHashTag(text):
   tag_s       = text.find('#')
-  if(-1 == tag_s) return None
+  if(-1 == tag_s): return None
   tag         = text[tag_s:]
   tag_e       = text.find(' ')
-  if(-1 == tag_e) return tag
+  if(-1 == tag_e): return tag
   return tag[:tag_e]
 
 def processTweetJson(twi):
@@ -29,7 +27,8 @@ def processTweetJson(twi):
       'time': twi['created_at'], 
       'tid' : twi['to_user_id'], 
       'id'  : twi['id'], 
-      'url' :  
+      'url' : getHref(twi['text']),
+      'tag' : getHashTag(twi['text'])
     }
   )
 
@@ -43,6 +42,7 @@ def processTweetObj(twi):
       'time': twi.GetCreatedAt() , 
       'tid' : twi.GetInReplyToUserId(), 
       'id'  : twi.GetId(), 
-      'url' : href 
+      'url' : getHref(twi.GetText()),
+      'tag' : getHashTag(twi.GetText())
     }
   )

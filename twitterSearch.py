@@ -13,16 +13,18 @@ SEARCH_PATH="/search.json"
 
 
 class SearchCrawler(object):
-  def __init__(self, tag, max_id = 200, interval=10):
+  def __init__(self, tag, max_id = 2000, interval=25):
     self.max_id = max_id
+    self.max_time = 100
+    self.currenttime = 0
     self.tag = tag
     self.interval = interval
     self.result = []
-  
+
   def search(self):
     c = httplib.HTTPConnection(SEARCH_HOST)
     params = {'q' : self.tag}
-    
+
     params['since_id'] = len(self.result)
     path = "%s?%s" %(SEARCH_PATH, urllib.urlencode(params))
     try:
@@ -39,7 +41,8 @@ class SearchCrawler(object):
    
     except (httplib.HTTPException, socket.error, socket.timeout), e:
       logging.error("search() error: %s" %(e))
-      exit() 
+      time.sleep(self.interval)
+      pass
     return None
 
   def crawl(self):
@@ -47,6 +50,10 @@ class SearchCrawler(object):
     while(len(self.result) < self.max_id):
       logging.info("Starting search")
       data = self.search()
+      if(self.currenttime > self.max_time): 
+        logging.info("runs 100 times")
+        break 
+      self.currenttime = self.currenttime  + 1
       if data:
         logging.info("%d new result(s)" %(len(data)))
       else:

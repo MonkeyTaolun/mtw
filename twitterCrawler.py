@@ -5,7 +5,7 @@ import json
 import logging
 
 import twitterutl     as  Utl
-
+import time
 class TwitterCrawler(object) :
   
   def __init__(self, conf):
@@ -39,8 +39,9 @@ class TwitterCrawler(object) :
       utweets = self.api.GetUserTimeline(userid)
       for tweet in utweets:
         tweets.append(Utl.processTweet(tweet))
-    
     except:
+      time.sleep(25)
+      print 'error !'
       pass
     
     return {'friendstweets' : friendstweets, 'usertweets' : tweets}
