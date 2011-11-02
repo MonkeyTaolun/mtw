@@ -1,0 +1,9 @@
+1. require :
+  python twitter: http://code.google.com/p/python-twitter/
+  mongo db python driver: http://api.mongodb.org/python/current/
+2. there require a tweet conf file need to have, you can
+get that from twitter.  
+3. try to run this you need modifed the twitterCrawlerDriver.py
+  this is a sample driver.
+
+
