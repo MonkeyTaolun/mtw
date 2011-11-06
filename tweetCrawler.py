@@ -7,7 +7,7 @@ import json
 
 class TweetCrawler(object):
   def __init__(self, term, twiconf, dbconf):
-    self.searchCrawler  = SearchCrawler(term)
+    self.searchCrawler  = SearchCrawler(term, 500, 24, 100)
     self.twitterCrawler = TwitterCrawler(twiconf)
     self.db             = MongoConf(term, dbconf)
 
@@ -22,6 +22,7 @@ class TweetCrawler(object):
         idset.add(twi['tid'])
       if(None != twi['tag']):
         tagset.add(twi['tag'])
+      print "get tweet %s" %(twi[id])
       self.db.insert(twi)
     
     self.deepCrawl(idset, 0)
@@ -34,20 +35,28 @@ class TweetCrawler(object):
       tweets  = self.twitterCrawler.getByUserID(uid)
       for tweet in tweets['usertweets']:
         twi = json.loads(tweet)
+        print "get tweet %s" %(tweet)
         self.db.insert(twi)
       for tweet in tweets['friendstweets']:
         twi = json.loads(tweet)
         if(None != twi['tid']):
           myset.add(twi['tid'])
-
+        print "get tweet %s" %(twi['id'])
         myset.add(twi['uid'])
         self.db.insert(twi)
     
     self.deepCrawl(myset, depth + 1)
   def tagCrawl(self, tagset):
     for tag in tagset:
-      tagcrawler  = SearchCrawler(tag)
+      tagcrawler  = SearchCrawler(tag, 100, 24, 20)
       tagtweets = tagcrawler.crawl()
       for tweet in tagtweets:
         twi = json.loads(tweet)
+        print "get tweet %s" %(twi['id'])
         self.db.insert(twi)
+
+
+if __name__ == '__main__':
+  
+  crawler = TweetCrawler('HIV', 'tweetconf.json', 'db.json')
+  crawler.crawl()

@@ -8,16 +8,15 @@ import twitterutl     as  Utl
 import time
 class TwitterCrawler(object) :
   
-  def __init__(self, conf):
+  def __init__(self, conf, interval = 11):
     #self.dbconf = dbconf
-    
+    self.interval = interval
     try:
       fileHandle = open(conf);
     except  IOError:
       logging.error("Loading config file: %s  error" %(conf))
       exit()
     conf = json.load(fileHandle)
-    
     self.api = twitter.Api(
       consumer_key        = conf['consumer_key'], 
       consumer_secret     = conf['consumer_secret'],
@@ -40,7 +39,7 @@ class TwitterCrawler(object) :
       for tweet in utweets:
         tweets.append(Utl.processTweet(tweet))
     except:
-      time.sleep(25)
+      time.sleep(self.interval)
       print 'error !'
       pass
     

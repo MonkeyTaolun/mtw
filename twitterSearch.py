@@ -13,9 +13,9 @@ SEARCH_PATH="/search.json"
 
 
 class SearchCrawler(object):
-  def __init__(self, tag, max_id = 2000, interval=25):
+  def __init__(self, tag, max_id = 2000, interval=25, times = 100):
     self.max_id = max_id
-    self.max_time = 100
+    self.max_time = times
     self.currenttime = 0
     self.tag = tag
     self.interval = interval
@@ -70,7 +70,6 @@ class SearchCrawler(object):
 if __name__ == '__main__':
   crawler = SearchCrawler('food price',20 ,5)
   result = crawler.crawl()
-  print "WTF"
   for tweet in result:
     twi = json.loads(tweet)
     print twi
