@@ -6,7 +6,7 @@ import getpass
 import base64
 import logging
 
-from dummyDataProc import DummyDataProc
+from mongoDataProc import MongoDataProc
 
 url='https://stream.twitter.com/1/statuses/filter.json'
 
@@ -33,12 +33,12 @@ class TwitterStream(object) :
       while True:
         line = f.readline()
         if line:
-          tweets = json.loads(line)
+          #tweets = json.loads(line)
           try:
-            data_pro.process(tweets)
-          except:
-            print "FIX this!!!!", line
-            logging.error('error in process data')
+            data_pro.process(line)
+          except Exception as e:
+            print "FIX this!!!!"
+            logging.error("error in process data %s" %(e))
         else:
           time.sleep(0.1)
     except urllib2.HTTPError, e:
@@ -54,7 +54,7 @@ if __name__ == '__main__' :
   password  = getpass.getpass('password: ')
   stream    = TwitterStream(username, password, 'streamconf.json')
 
-  dummy     = DummyDataProc()
+  dummy     = MongoDataProc('HIV', 'db.json')
   stream.tracking(dummy)
 
 

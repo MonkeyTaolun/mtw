@@ -20,12 +20,13 @@ class SearchCrawler(object):
     self.tag = tag
     self.interval = interval
     self.result = []
+    self.since_id = 0
 
   def search(self):
     c = httplib.HTTPConnection(SEARCH_HOST)
     params = {'q' : self.tag}
-
-    params['since_id'] = len(self.result)
+    params['since_id'] = self.since_id
+    
     path = "%s?%s" %(SEARCH_PATH, urllib.urlencode(params))
     try:
       c.request('GET', path)
@@ -34,32 +35,36 @@ class SearchCrawler(object):
       c.close()
       try:
         tweet  = json.loads(data)
-      except ValueError:
+        self.since_id = tweet['max_id']
+      except ValueError, KeyError:
         return None
       for twi in tweet['results']:
         self.result.append(utl.processTweetJson(twi))
-   
     except (httplib.HTTPException, socket.error, socket.timeout), e:
       logging.error("search() error: %s" %(e))
-      time.sleep(self.interval)
       pass
-    return None
+    time.sleep(self.interval)
+    return data
 
   def crawl(self):
     # there should be some bug
     while(len(self.result) < self.max_id):
-      logging.info("Starting search")
-      data = self.search()
       if(self.currenttime > self.max_time): 
         logging.info("runs 100 times")
         break 
+      print "currenttime is %d" %(self.currenttime)
+      
+      logging.info("Starting search")
+      data = self.search()
       self.currenttime = self.currenttime  + 1
+      
       if data:
         logging.info("%d new result(s)" %(len(data)))
       else:
         logging.info("No new results")
-        logging.info("Search complete sleeping for %d seconds" %(self.interval))
-        time.sleep(float(self.interval))
+        break;
+      #  logging.info("Search complete sleeping for %d seconds" %(self.interval))
+      #  time.sleep(float(self.interval))
     
     return self.result
 #

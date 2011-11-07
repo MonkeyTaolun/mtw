@@ -29,6 +29,7 @@ class TwitterCrawler(object) :
     friendstweets = []
     tweets  = []
     print "get user id %d" %(userid)
+    time.sleep(self.interval)
     try:
       ftweets = self.api.GetFriendsTimeline(userid)
 
@@ -37,10 +38,10 @@ class TwitterCrawler(object) :
 
       utweets = self.api.GetUserTimeline(userid)
       for tweet in utweets:
-        tweets.append(Utl.processTweet(tweet))
-    except:
-      time.sleep(self.interval)
-      print 'error !'
+        tweets.append(Utl.processTweetObj(tweet))
+    except Exception as e:
+      logging.error("getByUserID() error: %s" %(e))
+      print 'error ! %s' %(e)
       pass
     
     return {'friendstweets' : friendstweets, 'usertweets' : tweets}
@@ -54,7 +55,7 @@ class TwitterCrawler(object) :
 if __name__ == '__main__':
   
   crawler = TwitterCrawler('tweetconf.json')
-  tweets  = crawler.getByUserID(47166969)
+  tweets  = crawler.getByUserID(361737553)
   print "user tweets"
   for twi in tweets['usertweets']:
     print twi
