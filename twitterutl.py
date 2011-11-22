@@ -57,10 +57,10 @@ def streamUrl(entities):
   return urls
 
 def processTweetStream(twi):
-  print twi['user']['id']
-  print twi['text']
-  print getHref(twi['text']),
-  print getHashTag(twi['text'])
+#  print twi['user']['id']
+#  print twi['text']
+#  print getHref(twi['text']),
+#  print getHashTag(twi['text'])
   return json.dumps(
     {
       'uid' : twi['user']['id'], 

@@ -16,7 +16,7 @@ class TwitterStream(object) :
     try:
       fileHandle = open(data)
     except IOError:
-      logging.error("Loading config file: %s error" %(conf))
+      logging.error("Loading config file: %s error" %(data))
       exit()
     self.data     = json.load(fileHandle)
     self.headers  = {}
