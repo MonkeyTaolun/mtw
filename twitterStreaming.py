@@ -5,8 +5,7 @@ import urllib
 import getpass
 import base64
 import logging
-
-from mongoDataProc import MongoDataProc
+import time
 
 url='https://stream.twitter.com/1/statuses/filter.json'
 
@@ -48,13 +47,13 @@ class TwitterStream(object) :
     except KeyboardInterrupt:
       f.close()
 
-if __name__ == '__main__' :
+#if __name__ == '__main__' :
   
-  username  = raw_input('username:  ')
-  password  = getpass.getpass('password: ')
-  stream    = TwitterStream(username, password, 'streamconf.json')
+#  username  = raw_input('username:  ')
+#  password  = getpass.getpass('password: ')
+#  stream    = TwitterStream(username, password, 'streamconf.json')
 
-  dummy     = MongoDataProc('HIV', 'db.json')
-  stream.tracking(dummy)
+#  dummy     = MongoDataProc('HIV', 'db.json')
+#  stream.tracking(dummy)
 
 

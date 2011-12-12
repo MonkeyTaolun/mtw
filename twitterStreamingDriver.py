@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from  twitterStreaming  import  TwitterStream
-from  dataprocesser     import  DataProc
+from  twitterStreaming            import    TwitterStream
+from  dataprocesser_with_text     import  DataProc
 if __name__ == '__main__':
   
   username  = 'monkeytaolun'
