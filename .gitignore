@@ -1,5 +1,7 @@
 backup/
 result/
+data/
+*.txt
 *.pyc
 *.json
 *.swp

@@ -35,7 +35,7 @@ class Analyzer(object):
       #print line
       line  = line.strip() 
       line  = line.lower() 
-      splited_words = re.split('; |, | |\@|\n|;|,|\. |\#|\?|\!|\$|\%|\^|\&|\*|', line)
+      splited_words = re.split('; |, | |\@|\n|;|,|\. |\#|\?|\!|\$|\%|\^|\&|\*', line)
       words = []
       for word in splited_words:
         if '' == word:
